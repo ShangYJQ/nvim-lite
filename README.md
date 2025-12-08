@@ -83,14 +83,12 @@ Pre-configured parsers:
 
 ## Installation
 
-1. Clone or copy `init.lua` to your Neovim config directory:
+```bash
+# Linux/macOS
+git clone https://github.com/ShangYJQ/nvim-lite.git ~/.config/nvim
 
-   ```
-   # Windows
-   %LOCALAPPDATA%\nvim\init.lua
+# Windows (PowerShell)
+git clone https://github.com/ShangYJQ/nvim-lite.git $env:LOCALAPPDATA\nvim
+```
 
-   # Linux/macOS
-   ~/.config/nvim/init.lua
-   ```
-
-2. Start Neovim – plugins will be installed automatically.
+Start Neovim – plugins will be installed automatically.
