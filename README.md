@@ -79,7 +79,7 @@ Leader key: `<Space>`
 ## Treesitter Languages
 
 Pre-configured parsers:
-`lua`, `python`, `json`, `vim`, `markdown`, `cpp`, `c`, `rust`, `bash`, `javascript`, `typescript`, `yaml`
+`lua`, `python`, `json`, `vim`, `markdown`, `cpp`, `c`, `rust`, `bash`, `javascript`, `typescript`, `yaml`, `zig`
 
 ## Installation
 

@@ -78,6 +78,7 @@ vim.pack.add({
 						"javascript",
 						"typescript",
 						"yaml",
+						"zig",
 					},
 					highlight = { enable = true },
 					indent = { enable = true },
