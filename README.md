@@ -4,7 +4,7 @@ A minimal and clean Neovim configuration using the built-in `vim.pack` plugin ma
 
 ## Requirements
 
-- **Neovim** >= 0.10 (for `vim.pack` support)
+- **Neovim** >= 0.12 (for `vim.pack` support)
 - **Git** (for plugin installation)
 - A [Nerd Font](https://www.nerdfonts.com/) (for icons)
 
@@ -86,7 +86,9 @@ Pre-configured parsers:
 ```bash
 # Linux/macOS
 git clone https://github.com/ShangYJQ/nvim-lite.git ~/.config/nvim
+```
 
+```bash
 # Windows (PowerShell)
 git clone https://github.com/ShangYJQ/nvim-lite.git $env:LOCALAPPDATA\nvim
 ```
