@@ -17,13 +17,15 @@ opt.shiftwidth = tablen
 opt.expandtab = true
 opt.autoindent = true
 
-opt.autoindent = true
+opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus"
 
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
 opt.scrolloff = 8
 opt.sidescrolloff = 8
+
+opt.showmode = false
 
 opt.cursorline = true
 
@@ -131,6 +133,17 @@ vim.pack.add({
 					"filename",
 				},
 				lualine_x = {
+					{
+						function()
+							local clients = vim.lsp.get_clients({ bufnr = 0 })
+							if #clients == 0 then return "" end
+							local names = {}
+							for _, c in ipairs(clients) do
+								table.insert(names, c.name)
+							end
+							return " " .. table.concat(names, ", ")
+						end,
+					},
 					"encoding",
 					"fileformat",
 					"progress",
@@ -176,6 +189,55 @@ vim.pack.add({
 	end,
 })
 
+vim.pack.add({
+	{ src = "https://github.com/rafamadriz/friendly-snippets" },
+})
+
+-- blink.cmp
+vim.pack.add({
+	{ src = "https://github.com/saghen/blink.cmp" },
+}, {
+	load = function(plug_data)
+		vim.opt.runtimepath:append(plug_data.path)
+		require("blink.cmp").setup({
+			fuzzy = {
+				implementation = "lua",
+			},
+
+			sources = {
+				default = { "lsp", "path", "snippets", "buffer" },
+				providers = {
+					lsp = { score_offset = 100 },
+					path = { score_offset = 50 },
+					snippets = { score_offset = 0 },
+					buffer = { score_offset = -50 },
+				},
+			},
+
+			keymap = {
+				preset = "none",
+
+				["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+				["<cr>"] = { "accept", "fallback" },
+
+				["<C-Down>"] = { "scroll_documentation_down", "fallback" },
+				["<C-Up>"] = { "scroll_documentation_up", "fallback" },
+
+				["<Tab>"] = { "snippet_forward", "fallback" },
+				["<S-Tab>"] = { "snippet_backward", "fallback" },
+
+				["<Up>"] = { "select_prev", "fallback" },
+				["<Down>"] = { "select_next", "fallback" },
+
+				-- 添加更多导航键
+				["<C-n>"] = { "select_next", "fallback" },
+				["<C-p>"] = { "select_prev", "fallback" },
+				["<C-e>"] = { "hide", "fallback" },
+			},
+		})
+	end,
+})
+
 -- keymaps
 vim.keymap.set("i", "<C-q>", "<Esc>", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-q>", ":q!<CR>", { noremap = true, silent = true })
@@ -208,3 +270,11 @@ vim.keymap.set("n", "<leader>t", function()
 end, { desc = "open terminal" })
 
 vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "quit terminal" })
+
+-- lsp lazy boot
+vim.api.nvim_create_autocmd("BufReadPost", {
+	once = true,
+	callback = function(e)
+		require("lsp").setup()
+	end,
+})
