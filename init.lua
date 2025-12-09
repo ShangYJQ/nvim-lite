@@ -55,39 +55,10 @@ vim.opt.foldlevel = 99
 vim.pack.add({
 	{ src = "https://github.com/catppuccin/nvim" },
 	{ src = "https://github.com/nvim-tree/nvim-web-devicons" },
-})
-
-vim.pack.add({
-	{ src = "https://github.com/nvim-treesitter/nvim-treesitter" },
-}, {
-	load = function(plug_data)
-		vim.api.nvim_create_autocmd("BufReadPre", {
-			once = true,
-			callback = function()
-				vim.opt.runtimepath:append(plug_data.path)
-				---@diagnostic disable-next-line: missing-fields
-				require("nvim-treesitter.configs").setup({
-					ensure_installed = {
-						"lua",
-						"python",
-						"json",
-						"vim",
-						"markdown",
-						"cpp",
-						"c",
-						"rust",
-						"bash",
-						"javascript",
-						"typescript",
-						"yaml",
-						"zig",
-					},
-					highlight = { enable = true },
-					indent = { enable = true },
-				})
-			end,
-		})
-	end,
+	{ src = "https://github.com/neovim/nvim-lspconfig" },
+	{ src = "https://github.com/rachartier/tiny-inline-diagnostic.nvim" },
+	{ src = "https://github.com/stevearc/conform.nvim" },
+	{ src = "https://github.com/rafamadriz/friendly-snippets" },
 })
 
 vim.pack.add({
@@ -136,7 +107,9 @@ vim.pack.add({
 					{
 						function()
 							local clients = vim.lsp.get_clients({ bufnr = 0 })
-							if #clients == 0 then return "" end
+							if #clients == 0 then
+								return ""
+							end
 							local names = {}
 							for _, c in ipairs(clients) do
 								table.insert(names, c.name)
@@ -189,10 +162,6 @@ vim.pack.add({
 	end,
 })
 
-vim.pack.add({
-	{ src = "https://github.com/rafamadriz/friendly-snippets" },
-})
-
 -- blink.cmp
 vim.pack.add({
 	{ src = "https://github.com/saghen/blink.cmp" },
@@ -229,7 +198,6 @@ vim.pack.add({
 				["<Up>"] = { "select_prev", "fallback" },
 				["<Down>"] = { "select_next", "fallback" },
 
-				-- 添加更多导航键
 				["<C-n>"] = { "select_next", "fallback" },
 				["<C-p>"] = { "select_prev", "fallback" },
 				["<C-e>"] = { "hide", "fallback" },
@@ -238,9 +206,21 @@ vim.pack.add({
 	end,
 })
 
+-- conform
+require("conform").setup({
+	format_on_save = {
+		timeout_ms = 500,
+		lsp_format = "fallback",
+	},
+	formatters_by_ft = {
+		lua = { "stylua" },
+		rust = { "rustfmt", lsp_format = "fallback" },
+	},
+})
+
 -- keymaps
 vim.keymap.set("i", "<C-q>", "<Esc>", { noremap = true, silent = true })
-vim.keymap.set("n", "<C-q>", ":q!<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<C-q>", ":q<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-s>", ":w<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-z>", ":undo<CR>", { noremap = true, silent = true })
 
@@ -264,17 +244,59 @@ vim.keymap.set("n", "<C-Down>", ":resize +2<CR>", { noremap = true, silent = tru
 vim.keymap.set("n", "<C-Left>", ":vertical resize -2<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-Right>", ":vertical resize +2<CR>", { noremap = true, silent = true })
 
--- terminal
+vim.keymap.set("n", "<S-j>", "gt", { noremap = true, silent = true })
+vim.keymap.set("n", "<S-k>", "gT", { noremap = true, silent = true })
+vim.keymap.set("n", "<S-n>", ":tabnew ", { noremap = true, silent = true })
+vim.keymap.set("n", "<S-c>", "<cmd>tabclose<cr>", { noremap = true, silent = true })
+
 vim.keymap.set("n", "<leader>t", function()
 	vim.cmd("botright 10split | terminal")
 end, { desc = "open terminal" })
 
 vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "quit terminal" })
 
+-- lsp keymaps
+vim.api.nvim_create_autocmd("LspAttach", {
+	group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
+	callback = function(event)
+		local client = assert(vim.lsp.get_client_by_id(event.data.client_id))
+
+		if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+			vim.keymap.set("n", "<leader>h", function()
+				vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
+			end, { buffer = event.buf, desc = "LSP: Toggle Inlay Hints" })
+		end
+
+		vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = event.buf })
+		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = event.buf })
+		vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { buffer = event.buf })
+		vim.keymap.set("n", "gr", vim.lsp.buf.references, { buffer = event.buf })
+		vim.keymap.set("n", "gy", vim.lsp.buf.type_definition, { buffer = event.buf })
+		vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = event.buf })
+		vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = event.buf })
+		vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { buffer = event.buf })
+		vim.keymap.set("n", "<leader>cf", vim.lsp.buf.format, { buffer = event.buf })
+		vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, { buffer = event.buf })
+		vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { buffer = event.buf })
+
+		vim.keymap.set("n", "<leader>ld", function()
+			vim.diagnostic.open_float({ source = true })
+		end, { buffer = event.buf })
+
+		vim.diagnostic.open_float = require("tiny-inline-diagnostic.override").open_float
+	end,
+})
+
+require("tiny-inline-diagnostic").setup({
+	preset = "modern",
+	transparent_bg = true,
+	transparent_cursorline = true,
+})
+
 -- lsp lazy boot
 vim.api.nvim_create_autocmd("BufReadPost", {
 	once = true,
-	callback = function(e)
-		require("lsp").setup()
+	callback = function()
+		vim.lsp.enable("lua_ls")
 	end,
 })
