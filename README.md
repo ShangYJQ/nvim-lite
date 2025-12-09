@@ -4,147 +4,215 @@
 
 ## 特性
 
-### 🚀 核心功能
 - **轻量级设计**: 使用 Neovim 内置包管理器，快速启动
 - **现代补全**: blink.cmp 提供快速智能的代码补全
-- **LSP 集成**: 原生 LSP 支持，无需 nvim-lspconfig
-- **模块化配置**: 每个语言独立配置文件
+- **LSP 集成**: 原生 LSP 支持
+- **UI 增强**: Catppuccin 主题 + lualine 状态栏 + tiny-inline-diagnostic
 
-### 💡 blink.cmp 补全引擎
-基于 tiny-nvim 项目的理念，集成了强大的 blink.cmp 补全系统：
+---
 
-#### 补全源（按优先级排序）
-1. **LSP** - 语言服务器补全（最高优先级）
-2. **Path** - 文件路径补全
-3. **Snippets** - 代码片段
-4. **Buffer** - 缓冲区内容补全
+## 📦 LSP 安装指南
 
-#### 快捷键
-- `<C-space>`: 显示/隐藏补全菜单和文档
-- `<CR>`: 接受补全
-- `<C-n>`/`<C-p>` 或 `<Up>`/`<Down>`: 选择补全项
-- `<Tab>`/`<S-Tab>`: 代码片段跳转
-- `<C-e>`: 关闭补全菜单
-- `<C-Up>`/`<C-Down>`: 滚动文档
+### Lua (`lua_ls`)
 
-### 🔧 LSP 功能
+**用途**: Lua 语言智能补全、诊断、格式化
 
-#### 已配置的语言服务器
-- **Lua** (`lua_ls`) - Lua 语言支持
-- **TypeScript/JavaScript** (`ts_ls`) - TS/JS 完整支持
-- **Python** (`pyright`) - Python 语言支持
-- **Go** (`gopls`) - Go 语言支持
-- **Rust** (`rust_analyzer`) - Rust 语言支持
-- **C/C++** (`clangd`) - C/C++ 支持
-- **Zig** (`zls`) - Zig 语言支持
-- 更多语言配置在 `lsp/` 目录中
-
-#### LSP 快捷键
-- `K` 或 `<leader>k`: 显示悬停文档
-- `gd`: 跳转到定义
-- `gD`: 跳转到声明
-- `gi`: 跳转到实现
-- `gr`: 查找引用
-- `gy`: 跳转到类型定义
-- `<leader>ca` 或 `<leader>.`: 代码操作
-- `<leader>cr`: 重命名
-- `<leader>cf`: 格式化代码
-- `[d`/`]d`: 上/下一个诊断
-- `<leader>e`: 显示诊断浮窗
-- `<leader>q`: 诊断列表
-
-### 📦 安装语言服务器
-
-语言服务器需要单独安装，推荐方法：
+**安装方法**:
 
 ```bash
-# Lua
-# Windows: scoop install lua-language-server
-# Mac: brew install lua-language-server
-# Linux: 从 GitHub releases 下载
+# Windows (scoop)
+scoop install lua-language-server
 
-# TypeScript/JavaScript
-npm install -g typescript-language-server typescript
+# macOS (Homebrew)
+brew install lua-language-server
 
-# Python
-pip install pyright
+# Linux (Ubuntu/Debian)
+# 从 GitHub Releases 下载: https://github.com/LuaLS/lua-language-server/releases
+```
 
-# Go
-go install golang.org/x/tools/gopls@latest
+**格式化工具** (可选):
 
-# Rust
+```bash
+# stylua - Lua 代码格式化
+cargo install stylua
+# 或
+npm install -g @johnnymorganz/stylua-bin
+```
+
+---
+
+### TypeScript / JavaScript (`vtsls`)
+
+**用途**: TypeScript/JavaScript 智能补全、类型检查、重构
+
+**安装方法**:
+
+```bash
+npm install -g @vtsls/language-server
+```
+
+**代码检查** (`eslint`):
+
+```bash
+# 项目本地安装（推荐）
+npm install --save-dev eslint
+
+# 或全局安装
+npm install -g eslint
+```
+
+---
+
+### Vue (`vue_ls` + `vtsls`)
+
+**用途**: Vue 单文件组件支持，与 TypeScript 深度集成
+
+**安装方法**:
+
+```bash
+npm install -g @vue/language-server
+```
+
+**环境变量配置** (必须):
+
+```bash
+# 找到安装路径
+npm list -g @vue/language-server
+
+# 设置环境变量 VUE_LS_PATH
+# Windows (PowerShell)
+$env:VUE_LS_PATH = "C:\Users\<你的用户名>\AppData\Roaming\npm\node_modules\@vue\language-server"
+
+# macOS / Linux
+export VUE_LS_PATH="/usr/local/lib/node_modules/@vue/language-server"
+```
+
+> ⚠️ 如果未设置 `VUE_LS_PATH`，打开 `.vue` 文件时会显示警告
+
+---
+
+### Rust (`rust_analyzer`)
+
+**用途**: Rust 语言智能补全、诊断、内联提示
+
+**安装方法**:
+
+```bash
+# 通过 rustup（推荐）
 rustup component add rust-analyzer
 
-# C/C++
-# Windows: scoop install llvm (包含 clangd)
-# Mac: brew install llvm
-# Linux: apt install clangd
+# 或独立安装
+# Windows (scoop)
+scoop install rust-analyzer
 
-# Zig
-# 从 https://github.com/zigtools/zls 下载
+# macOS (Homebrew)
+brew install rust-analyzer
 ```
 
-### 🎨 UI 增强
-- **主题**: Catppuccin Mocha（透明背景）
-- **状态栏**: lualine 提供美观的状态信息
-- **图标**: Nerd Font 图标支持
-- **诊断**: 清晰的错误和警告显示
+**格式化工具**:
 
-### ⚡ 性能优化
-- 使用纯 Lua 实现的 fuzzy 匹配（避免二进制依赖）
-- 延迟加载 LSP（首次打开文件时启动）
-- 智能的补全触发和限制
-- 优化的 Treesitter 配置
-
-## 配置结构
-
-```
-nvim/
-├── init.lua          # 主配置文件
-├── lsp.lua           # LSP 主模块
-├── lsp/              # 语言配置目录
-│   ├── lua.lua       # Lua LSP 配置
-│   ├── python.lua    # Python LSP 配置
-│   ├── typescript.lua # TypeScript LSP 配置
-│   └── ...           # 其他语言配置
-└── README.md         # 本文件
+```bash
+# rustfmt（通常随 Rust 安装）
+rustup component add rustfmt
 ```
 
-## 添加新语言支持
+---
 
-在 `lsp/` 目录创建新文件，例如 `lsp/rust.lua`：
+### C / C++ (`clangd`)
 
-```lua
-return {
-    cmd = { "rust-analyzer" },
-    filetypes = { "rust" },
-    root_markers = { "Cargo.toml", ".git" },
-    settings = {
-        -- 语言特定设置
-    },
-}
+**用途**: C/C++ 智能补全、诊断、代码导航
+
+**安装方法**:
+
+```bash
+# Windows (scoop)
+scoop install llvm
+# clangd 包含在 LLVM 中
+
+# macOS (Homebrew)
+brew install llvm
+# 或单独安装
+brew install clangd
+
+# Linux (Ubuntu/Debian)
+sudo apt install clangd
+
+# Linux (Fedora)
+sudo dnf install clang-tools-extra
 ```
 
-文件名将自动映射到对应的 LSP 服务器名称。
+**编译数据库** (推荐):
 
-## 基础键位映射
+为获得最佳体验，在项目根目录生成 `compile_commands.json`:
+
+```bash
+# CMake 项目
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
+
+# Make 项目 (使用 Bear)
+bear -- make
+```
+
+---
+
+## 🔧 LSP 快捷键
+
+| 按键 | 功能 |
+| --- | --- |
+| `K` | 悬停文档 |
+| `gd` | 跳转到定义 |
+| `gD` | 跳转到声明 |
+| `gi` | 跳转到实现 |
+| `gr` | 查找引用 |
+| `gy` | 跳转到类型定义 |
+| `<leader>ca` | 代码操作 |
+| `<leader>cr` | 重命名符号 |
+| `<leader>cf` | 格式化代码 |
+| `<leader>e` | 显示诊断 |
+| `<leader>ih` | 切换内联提示 |
+| `<C-k>` (插入模式) | 签名帮助 |
+
+---
+
+## 💡 blink.cmp 补全快捷键
+
+| 按键 | 功能 |
+| --- | --- |
+| `<C-space>` | 显示/隐藏补全 |
+| `<CR>` | 接受补全 |
+| `<Up>` / `<Down>` | 选择补全项 |
+| `<C-n>` / `<C-p>` | 选择补全项 |
+| `<Tab>` / `<S-Tab>` | 代码片段跳转 |
+| `<C-e>` | 关闭补全 |
+| `<C-Up>` / `<C-Down>` | 滚动文档 |
+
+---
+
+## ⌨️ 通用快捷键
 
 Leader key: `<Space>`
 
-### 通用
-| 按键 | 模式 | 功能 |
-| --- | --- | --- |
-| `<C-q>` | 插入/普通 | 退出/退出插入模式 |
-| `<C-s>` | 普通 | 保存文件 |
-| `<C-z>` | 普通 | 撤销 |
-| `d` | 普通/可视 | 删除（不复制） |
-
-### 窗口管理
+### 编辑
 | 按键 | 功能 |
 | --- | --- |
-| `<leader>l/j/h/k` | 分割窗口（右/下/左/上） |
+| `<C-s>` | 保存 |
+| `<C-q>` | 退出 (插入模式退出到普通模式) |
+| `<C-z>` | 撤销 |
+| `d` | 删除（不复制到剪贴板） |
+
+### 窗口
+| 按键 | 功能 |
+| --- | --- |
+| `<leader>l/j/h/k` | 分割窗口 |
 | `<C-h/j/k/l>` | 窗口导航 |
 | `<C-方向键>` | 调整窗口大小 |
+
+### 标签页
+| 按键 | 功能 |
+| --- | --- |
+| `<S-j>` / `<S-k>` | 下/上一个标签 |
+| `<S-n>` | 新建标签 |
+| `<S-c>` | 关闭标签 |
 
 ### 终端
 | 按键 | 功能 |
@@ -152,7 +220,18 @@ Leader key: `<Space>`
 | `<leader>t` | 打开终端 |
 | `<Esc>` | 退出终端模式 |
 
+---
+
+## 📁 配置结构
+
+```
+nvim/
+├── init.lua          # 主配置文件（所有配置）
+└── README.md         # 本文件
+```
+
+---
+
 ## 致谢
 
-本配置受 [tiny-nvim](https://github.com/jellydn/tiny-nvim) 项目启发，
-采用了其先进的配置理念和 blink.cmp 集成方案。
+本配置受 [tiny-nvim](https://github.com/jellydn/tiny-nvim) 项目启发。
