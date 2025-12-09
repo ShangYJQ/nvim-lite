@@ -4,7 +4,6 @@ vim.g.maplocalleader = " "
 
 -- EDITOR OPTIONS
 local opt = vim.opt
-
 -- Display
 opt.number = true
 opt.relativenumber = true
@@ -94,7 +93,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
 require("nvim-treesitter.configs").setup({
 	ensure_installed = { "vue", "html", "css", "javascript", "typescript", "lua" },
 	auto_install = true,
-	highlight = { enable = true },
+	highlight = { enable = false },
 })
 
 -- nvim-ts-autotag (auto close/rename HTML tags)
@@ -116,32 +115,32 @@ require("mini.pairs").setup({
 })
 
 -- Blink.cmp (autocompletion)
-require("blink.cmp").setup({
-	fuzzy = { implementation = "lua" }, -- Pure Lua fuzzy matching
-	sources = {
-		default = { "lsp", "path", "snippets", "buffer" },
-		providers = {
-			lsp = { score_offset = 100 },
-			path = { score_offset = 50 },
-			snippets = { score_offset = 0 },
-			buffer = { score_offset = -50 },
-		},
-	},
-	keymap = {
-		preset = "none",
-		["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
-		["<CR>"] = { "accept", "fallback" },
-		["<C-Down>"] = { "scroll_documentation_down", "fallback" },
-		["<C-Up>"] = { "scroll_documentation_up", "fallback" },
-		["<Tab>"] = { "snippet_forward", "fallback" },
-		["<S-Tab>"] = { "snippet_backward", "fallback" },
-		["<Up>"] = { "select_prev", "fallback" },
-		["<Down>"] = { "select_next", "fallback" },
-		["<C-n>"] = { "select_next", "fallback" },
-		["<C-p>"] = { "select_prev", "fallback" },
-		["<C-e>"] = { "hide", "fallback" },
-	},
-})
+-- require("blink.cmp").setup({
+-- 	keymap = {
+-- 		preset = "enter",
+-- 		["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+-- 		["<CR>"] = { "accept", "fallback" },
+-- 		["<C-Down>"] = { "scroll_documentation_down", "fallback" },
+-- 		["<C-Up>"] = { "scroll_documentation_up", "fallback" },
+-- 		["<Tab>"] = { "snippet_forward", "fallback" },
+-- 		["<S-Tab>"] = { "snippet_backward", "fallback" },
+-- 		["<Up>"] = { "select_prev", "fallback" },
+-- 		["<Down>"] = { "select_next", "fallback" },
+-- 		["<C-n>"] = { "select_next", "fallback" },
+-- 		["<C-p>"] = { "select_prev", "fallback" },
+-- 		["<C-e>"] = { "hide", "fallback" },
+-- 	},
+-- 	fuzzy = { implementation = "prefer_rust_with_warning" },
+-- 	sources = {
+-- 		default = { "lsp", "path", "snippets", "buffer" },
+-- 		providers = {
+-- 			lsp = { score_offset = 100 },
+-- 			path = { score_offset = 50 },
+-- 			snippets = { score_offset = 0 },
+-- 			buffer = { score_offset = -50 },
+-- 		},
+-- 	},
+-- })
 
 -- Conform (formatting on save)
 require("conform").setup({
@@ -231,7 +230,6 @@ local map = vim.keymap.set
 map("i", "<C-q>", "<Esc>", { desc = "Exit insert mode" })
 map("n", "<C-q>", "<cmd>q<CR>", { desc = "Quit" })
 map("n", "<C-Q>", "<cmd>q!<CR>", { desc = "Forced quit" })
-map("n", "<C-s>", "<cmd>w<CR>", { desc = "Save" })
 map("n", "<C-z>", "<cmd>undo<CR>", { desc = "Undo" })
 map({ "n", "v" }, "d", '"_d', { desc = "Delete to black hole register" })
 map("n", "<leader>h", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
