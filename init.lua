@@ -63,15 +63,14 @@ vim.pack.add({
 	-- LSP and diagnostics
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
 	{ src = "https://github.com/rachartier/tiny-inline-diagnostic.nvim" },
-	{ src = "https://github.com/saghen/blink.cmp" },
+	{ src = "https://github.com/saghen/blink.cmp", version = vim.version.range("^1") },
 	-- Formatting and snippets
 	{ src = "https://github.com/stevearc/conform.nvim" },
 	{ src = "https://github.com/rafamadriz/friendly-snippets" },
-	-- Treesitter
-	{ src = "https://github.com/nvim-treesitter/nvim-treesitter" },
 	-- Editing enhancement
 	{ src = "https://github.com/echasnovski/mini.pairs" },
 	{ src = "https://github.com/windwp/nvim-ts-autotag" },
+	{ src = "https://github.com/lewis6991/gitsigns.nvim" },
 })
 
 -- PLUGIN CONFIGURATIONS
@@ -87,13 +86,6 @@ vim.api.nvim_create_autocmd("VimEnter", {
 		})
 		vim.cmd("colorscheme catppuccin")
 	end,
-})
-
--- Treesitter (syntax highlighting and parsing)
-require("nvim-treesitter.configs").setup({
-	ensure_installed = { "vue", "html", "css", "javascript", "typescript", "lua" },
-	auto_install = true,
-	highlight = { enable = false },
 })
 
 -- nvim-ts-autotag (auto close/rename HTML tags)
@@ -114,33 +106,45 @@ require("mini.pairs").setup({
 	markdown = true,
 })
 
+require("gitsigns").setup({ signcolumn = false })
 -- Blink.cmp (autocompletion)
--- require("blink.cmp").setup({
--- 	keymap = {
--- 		preset = "enter",
--- 		["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
--- 		["<CR>"] = { "accept", "fallback" },
--- 		["<C-Down>"] = { "scroll_documentation_down", "fallback" },
--- 		["<C-Up>"] = { "scroll_documentation_up", "fallback" },
--- 		["<Tab>"] = { "snippet_forward", "fallback" },
--- 		["<S-Tab>"] = { "snippet_backward", "fallback" },
--- 		["<Up>"] = { "select_prev", "fallback" },
--- 		["<Down>"] = { "select_next", "fallback" },
--- 		["<C-n>"] = { "select_next", "fallback" },
--- 		["<C-p>"] = { "select_prev", "fallback" },
--- 		["<C-e>"] = { "hide", "fallback" },
--- 	},
--- 	fuzzy = { implementation = "prefer_rust_with_warning" },
--- 	sources = {
--- 		default = { "lsp", "path", "snippets", "buffer" },
--- 		providers = {
--- 			lsp = { score_offset = 100 },
--- 			path = { score_offset = 50 },
--- 			snippets = { score_offset = 0 },
--- 			buffer = { score_offset = -50 },
--- 		},
--- 	},
--- })
+require("blink.cmp").setup({
+	keymap = {
+		preset = "enter",
+		["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+		["<CR>"] = { "accept", "fallback" },
+		["<C-Down>"] = { "scroll_documentation_down", "fallback" },
+		["<C-Up>"] = { "scroll_documentation_up", "fallback" },
+		["<Tab>"] = { "snippet_forward", "fallback" },
+		["<S-Tab>"] = { "snippet_backward", "fallback" },
+		["<Up>"] = { "select_prev", "fallback" },
+		["<Down>"] = { "select_next", "fallback" },
+		["<C-n>"] = { "select_next", "fallback" },
+		["<C-p>"] = { "select_prev", "fallback" },
+		["<C-e>"] = { "hide", "fallback" },
+	},
+	fuzzy = { implementation = "prefer_rust_with_warning" },
+	appearance = {
+		use_nvim_cmp_as_default = true,
+		nerd_font_variant = "normal",
+	},
+
+	completion = {
+		documentation = {
+			auto_show = true,
+			auto_show_delay_ms = 200,
+		},
+	},
+
+	cmdline = {
+		keymap = {
+			preset = "inherit",
+			["<CR>"] = { "accept_and_enter", "fallback" },
+		},
+	},
+
+	sources = { default = { "lsp" } },
+})
 
 -- Conform (formatting on save)
 require("conform").setup({
