@@ -63,10 +63,9 @@ vim.pack.add({
 	-- LSP and diagnostics
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
 	{ src = "https://github.com/rachartier/tiny-inline-diagnostic.nvim" },
-	{ src = "https://github.com/saghen/blink.cmp", version = vim.version.range("^1") },
-	-- Formatting and snippets
+	{ src = "https://github.com/saghen/blink.cmp" },
+	-- Formatting
 	{ src = "https://github.com/stevearc/conform.nvim" },
-	{ src = "https://github.com/rafamadriz/friendly-snippets" },
 	-- Editing enhancement
 	{ src = "https://github.com/echasnovski/mini.pairs" },
 	{ src = "https://github.com/windwp/nvim-ts-autotag" },
@@ -106,7 +105,9 @@ require("mini.pairs").setup({
 	markdown = true,
 })
 
-require("gitsigns").setup({ signcolumn = false })
+-- gitsigns
+require("gitsigns").setup()
+
 -- Blink.cmp (autocompletion)
 require("blink.cmp").setup({
 	keymap = {
@@ -142,8 +143,8 @@ require("blink.cmp").setup({
 			["<CR>"] = { "accept_and_enter", "fallback" },
 		},
 	},
-
-	sources = { default = { "lsp" } },
+	default = { "lsp", "path", "snippets", "buffer" },
+	opts_extend = { "sources.default" },
 })
 
 -- Conform (formatting on save)
