@@ -68,7 +68,6 @@ vim.pack.add({
 	{ src = "https://github.com/stevearc/conform.nvim" },
 	-- Editing enhancement
 	{ src = "https://github.com/echasnovski/mini.pairs" },
-	{ src = "https://github.com/windwp/nvim-ts-autotag" },
 	{ src = "https://github.com/lewis6991/gitsigns.nvim" },
 })
 
@@ -85,15 +84,6 @@ vim.api.nvim_create_autocmd("VimEnter", {
 		})
 		vim.cmd("colorscheme catppuccin")
 	end,
-})
-
--- nvim-ts-autotag (auto close/rename HTML tags)
-require("nvim-ts-autotag").setup({
-	opts = {
-		enable_close = true, -- Auto close tags
-		enable_rename = true, -- Auto rename paired tags
-		enable_close_on_slash = true, -- Auto close on </
-	},
 })
 
 -- Mini.pairs (auto-pairing brackets/quotes)
