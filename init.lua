@@ -63,7 +63,7 @@ vim.pack.add({
 	-- LSP and diagnostics
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
 	{ src = "https://github.com/rachartier/tiny-inline-diagnostic.nvim" },
-	{ src = "https://github.com/saghen/blink.cmp" },
+	-- { src = "https://github.com/saghen/blink.cmp" },
 	-- Formatting
 	{ src = "https://github.com/stevearc/conform.nvim" },
 	-- Editing enhancement
@@ -99,43 +99,43 @@ require("mini.pairs").setup({
 require("gitsigns").setup()
 
 -- Blink.cmp (autocompletion)
-require("blink.cmp").setup({
-	keymap = {
-		preset = "enter",
-		["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
-		["<CR>"] = { "accept", "fallback" },
-		["<C-Down>"] = { "scroll_documentation_down", "fallback" },
-		["<C-Up>"] = { "scroll_documentation_up", "fallback" },
-		["<Tab>"] = { "snippet_forward", "fallback" },
-		["<S-Tab>"] = { "snippet_backward", "fallback" },
-		["<Up>"] = { "select_prev", "fallback" },
-		["<Down>"] = { "select_next", "fallback" },
-		["<C-n>"] = { "select_next", "fallback" },
-		["<C-p>"] = { "select_prev", "fallback" },
-		["<C-e>"] = { "hide", "fallback" },
-	},
-	fuzzy = { implementation = "prefer_rust_with_warning" },
-	appearance = {
-		use_nvim_cmp_as_default = true,
-		nerd_font_variant = "normal",
-	},
-
-	completion = {
-		documentation = {
-			auto_show = true,
-			auto_show_delay_ms = 200,
-		},
-	},
-
-	cmdline = {
-		keymap = {
-			preset = "inherit",
-			["<CR>"] = { "accept_and_enter", "fallback" },
-		},
-	},
-	default = { "lsp", "path", "snippets", "buffer" },
-	opts_extend = { "sources.default" },
-})
+-- require("blink.cmp").setup({
+-- 	keymap = {
+-- 		preset = "enter",
+-- 		["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+-- 		["<CR>"] = { "accept", "fallback" },
+-- 		["<C-Down>"] = { "scroll_documentation_down", "fallback" },
+-- 		["<C-Up>"] = { "scroll_documentation_up", "fallback" },
+-- 		["<Tab>"] = { "snippet_forward", "fallback" },
+-- 		["<S-Tab>"] = { "snippet_backward", "fallback" },
+-- 		["<Up>"] = { "select_prev", "fallback" },
+-- 		["<Down>"] = { "select_next", "fallback" },
+-- 		["<C-n>"] = { "select_next", "fallback" },
+-- 		["<C-p>"] = { "select_prev", "fallback" },
+-- 		["<C-e>"] = { "hide", "fallback" },
+-- 	},
+-- 	fuzzy = { implementation = "prefer_rust_with_warning" },
+-- 	appearance = {
+-- 		use_nvim_cmp_as_default = true,
+-- 		nerd_font_variant = "normal",
+-- 	},
+--
+-- 	completion = {
+-- 		documentation = {
+-- 			auto_show = true,
+-- 			auto_show_delay_ms = 200,
+-- 		},
+-- 	},
+--
+-- 	cmdline = {
+-- 		keymap = {
+-- 			preset = "inherit",
+-- 			["<CR>"] = { "accept_and_enter", "fallback" },
+-- 		},
+-- 	},
+-- 	default = { "lsp", "path", "snippets", "buffer" },
+-- 	opts_extend = { "sources.default" },
+-- })
 
 -- Conform (formatting on save)
 require("conform").setup({
@@ -308,46 +308,46 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 	callback = function()
 		-- for vue_ls: read from VUE_LS_PATH env
 		-- run npm list -g @vue/language-server to find path
-		local vue_language_server_path = vim.env.VUE_LS_PATH
-		if vue_language_server_path then
-			local vue_plugin = {
-				name = "@vue/typescript-plugin",
-				location = vue_language_server_path,
-				languages = { "vue" },
-				configNamespace = "typescript",
-				enableForWorkspaceTypeScriptVersions = true,
-			}
-			vim.lsp.config("vtsls", {
-				filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
-				settings = {
-					vtsls = {
-						tsserver = {
-							globalPlugins = {
-								vue_plugin,
-							},
-						},
-					},
-				},
-			})
-			vim.lsp.enable("vue_ls")
-		end
+		-- local vue_language_server_path = vim.env.VUE_LS_PATH
+		-- if vue_language_server_path then
+		-- 	local vue_plugin = {
+		-- 		name = "@vue/typescript-plugin",
+		-- 		location = vue_language_server_path,
+		-- 		languages = { "vue" },
+		-- 		configNamespace = "typescript",
+		-- 		enableForWorkspaceTypeScriptVersions = true,
+		-- 	}
+		-- 	vim.lsp.config("vtsls", {
+		-- 		filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+		-- 		settings = {
+		-- 			vtsls = {
+		-- 				tsserver = {
+		-- 					globalPlugins = {
+		-- 						vue_plugin,
+		-- 					},
+		-- 				},
+		-- 			},
+		-- 		},
+		-- 	})
+		-- 	vim.lsp.enable("vue_ls")
+		-- end
 		vim.lsp.enable("lua_ls")
 		vim.lsp.enable("rust_analyzer")
 		vim.lsp.enable("clangd")
-		vim.lsp.enable("eslint")
-		vim.lsp.enable("vtsls")
+		-- vim.lsp.enable("eslint")
+		-- vim.lsp.enable("vtsls")
 	end,
 })
 
 -- Notify if VUE_LS_PATH is not set when opening .vue files
-vim.api.nvim_create_autocmd("BufReadPost", {
-	pattern = "*.vue",
-	callback = function()
-		if not vim.env.VUE_LS_PATH then
-			vim.notify(
-				"VUE_LS_PATH environment variable is not set. Vue LSP will not work.\nRun `npm list -g @vue/language-server` to find the path.",
-				vim.log.levels.WARN
-			)
-		end
-	end,
-})
+-- vim.api.nvim_create_autocmd("BufReadPost", {
+-- 	pattern = "*.vue",
+-- 	callback = function()
+-- 		if not vim.env.VUE_LS_PATH then
+-- 			vim.notify(
+-- 				"VUE_LS_PATH environment variable is not set. Vue LSP will not work.\nRun `npm list -g @vue/language-server` to find the path.",
+-- 				vim.log.levels.WARN
+-- 			)
+-- 		end
+-- 	end,
+-- })
