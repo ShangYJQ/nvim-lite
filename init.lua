@@ -1,3 +1,8 @@
+if vim.g.neovide then
+	vim.notify("Config for neovide")
+	require("neovide")
+end
+
 -- LEADER KEY
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
@@ -52,6 +57,14 @@ opt.foldmethod = "expr"
 opt.foldexpr = "nvim_treesitter#foldexpr()"
 opt.foldlevel = 99
 
+-- netrw
+vim.g.netrw_liststyle = 1 -- Use the long listing view
+vim.g.netrw_sort_by = "size" -- Sort files by size
+vim.g.netrw_winsize = 30
+vim.g.netrw_liststyle = 3
+vim.g.netrw_banner = 0
+vim.g.netrw_localcopydircmd = "cp -r"
+
 -- PLUGINS
 
 -- Core plugins (no custom load callback)
@@ -79,7 +92,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
 	callback = function()
 		require("catppuccin").setup({
 			flavour = "mocha",
-			transparent_background = true,
+			transparent_background = not vim.g.neovide,
 			float = { transparent = false, solid = false },
 		})
 		vim.cmd("colorscheme catppuccin")
@@ -257,6 +270,8 @@ map("n", "<S-j>", "gt", { desc = "Next tab" })
 map("n", "<S-k>", "gT", { desc = "Previous tab" })
 map("n", "<S-n>", ":tabnew ", { desc = "New tab" })
 map("n", "<S-c>", "<cmd>tabclose<CR>", { desc = "Close tab" })
+
+map("n", "<Leader>e", "<cmd>Lexplore<CR>", { desc = "netrw explore" })
 
 -- Terminal
 map("n", "<leader>t", function()
