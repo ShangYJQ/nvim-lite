@@ -152,15 +152,11 @@ require("gitsigns").setup()
 
 -- Conform (formatting on save)
 require("conform").setup({
-	formatters = {
-		clang_format = {
-			prepend_args = { "--style={IndentWidth: 4, TabWidth: 4, UseTab: Never}" },
-		},
-	},
 	format_on_save = { timeout_ms = 500, lsp_format = "fallback" },
 	formatters_by_ft = {
 		lua = { "stylua" },
 		rust = { "rustfmt", lsp_format = "fallback" },
+		python = { "ruff_format" },
 	},
 })
 
@@ -353,6 +349,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 		vim.lsp.enable("lua_ls")
 		vim.lsp.enable("rust_analyzer")
 		vim.lsp.enable("clangd")
+		vim.lsp.enable("ruff")
 		-- vim.lsp.enable("eslint")
 		-- vim.lsp.enable("vtsls")
 	end,
