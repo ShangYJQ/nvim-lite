@@ -139,6 +139,11 @@ require("gitsigns").setup()
 
 -- Conform (formatting on save)
 require("conform").setup({
+	formatters = {
+		clang_format = {
+			prepend_args = { "--style={IndentWidth: 4, TabWidth: 4, UseTab: Never}" },
+		},
+	},
 	format_on_save = { timeout_ms = 500, lsp_format = "fallback" },
 	formatters_by_ft = {
 		lua = { "stylua" },
