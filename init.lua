@@ -245,7 +245,7 @@ map("n", "<C-q>", "<cmd>q<CR>", { desc = "Quit" })
 map("n", "<C-Q>", "<cmd>q!<CR>", { desc = "Forced quit" })
 map("n", "<C-z>", "<cmd>undo<CR>", { desc = "Undo" })
 map({ "n", "v" }, "d", '"_d', { desc = "Delete to black hole register" })
-map("n", "<leader>h", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
+map("n", "<leader>H", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
 
 -- Window navigation (Ctrl + hjkl)
 map("n", "<C-h>", "<C-w>h", { desc = "Focus left window" })
@@ -265,13 +265,12 @@ map("n", "<C-Down>", "<cmd>resize +2<CR>", { desc = "Increase height" })
 map("n", "<C-Left>", "<cmd>vertical resize -2<CR>", { desc = "Decrease width" })
 map("n", "<C-Right>", "<cmd>vertical resize +2<CR>", { desc = "Increase width" })
 
--- Tab navigation (Shift + jk)
-map("n", "<S-j>", "gt", { desc = "Next tab" })
-map("n", "<S-k>", "gT", { desc = "Previous tab" })
+-- Tab navigation
 map("n", "<S-n>", ":tabnew ", { desc = "New tab" })
 map("n", "<S-c>", "<cmd>tabclose<CR>", { desc = "Close tab" })
 
-map("n", "<Leader>e", "<cmd>Lexplore<CR>", { desc = "netrw explore" })
+-- netrw
+map("n", "<leader>e", "<cmd>Lexplore<CR>", { desc = "netrw explore" })
 
 -- Terminal
 map("n", "<leader>t", function()
@@ -312,7 +311,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		map("n", "<leader>cf", vim.lsp.buf.format, { buffer = buf, desc = "LSP: Format buffer" })
 
 		-- Diagnostics
-		map("n", "<leader>e", vim.diagnostic.open_float, { buffer = buf, desc = "LSP: Show diagnostics" })
+		-- map("n", "<leader>e", vim.diagnostic.open_float, { buffer = buf, desc = "LSP: Show diagnostics" })
 		map("n", "<leader>ld", function()
 			vim.diagnostic.open_float({ source = true })
 		end, { buffer = buf, desc = "LSP: Show diagnostics with source" })
