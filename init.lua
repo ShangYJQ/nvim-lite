@@ -301,8 +301,9 @@ map("n", "<leader>e", "<cmd>Lexplore<CR>", { desc = "netrw explore" })
 -- Terminal
 map("n", "<leader>t", function()
 	vim.cmd("botright 10split | terminal")
+	vim.cmd("startinsert")
 end, { desc = "Open terminal" })
-map("t", "<Esc>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
+map("t", "<C-q>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
 
 -- LSP CONFIGURATION
 
