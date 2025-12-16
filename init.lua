@@ -22,6 +22,7 @@ opt.softtabstop = tablen
 opt.shiftwidth = tablen
 opt.expandtab = true
 opt.autoindent = true
+vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
 -- Clipboard (disable for SSH sessions)
 opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus"
@@ -87,6 +88,7 @@ vim.pack.add({
 	-- Editing enhancement
 	{ src = "https://github.com/echasnovski/mini.pairs" },
 	{ src = "https://github.com/lewis6991/gitsigns.nvim" },
+	{ src = "https://github.com/nvim-treesitter/nvim-treesitter" },
 })
 
 -- PLUGIN CONFIGURATIONS
@@ -102,6 +104,18 @@ vim.api.nvim_create_autocmd("VimEnter", {
 		})
 		vim.cmd("colorscheme catppuccin")
 	end,
+})
+
+-- treesitter
+require("nvim-treesitter.install").update("all")
+
+require("nvim-treesitter.configs").setup({
+	auto_install = true,
+	ensure_installed = { "html", "css", "vim", "lua", "javascript", "typescript", "tsx", "zig", "python", "cpp", "c" },
+	highlight = {
+		enable = true,
+		additional_vim_regex_highlighting = false,
+	},
 })
 
 -- Mini.pairs (auto-pairing brackets/quotes)
