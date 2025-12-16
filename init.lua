@@ -314,6 +314,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		local buf = event.buf
 		local client = vim.lsp.get_client_by_id(event.data.client_id)
 
+		-- add omnifunc to cmp with lsp
+		vim.bo[buf].omnifunc = "v:lua.vim.lsp.omnifunc"
+
 		-- Toggle inlay hints if supported
 		if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
 			map("n", "<leader>ih", function()
