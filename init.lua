@@ -93,11 +93,10 @@ vim.pack.add({
 	-- LSP and diagnostics
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
 	{ src = "https://github.com/rachartier/tiny-inline-diagnostic.nvim" },
-	-- { src = "https://github.com/saghen/blink.cmp" },
+	{ src = "https://github.com/saghen/blink.cmp" },
 	-- Formatting
 	{ src = "https://github.com/stevearc/conform.nvim" },
 	-- Editing enhancement
-	{ src = "https://github.com/echasnovski/mini.pairs" },
 	{ src = "https://github.com/lewis6991/gitsigns.nvim" },
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter" },
 })
@@ -129,56 +128,35 @@ require("nvim-treesitter.configs").setup({
 	},
 })
 
--- Mini.pairs (auto-pairing brackets/quotes)
-require("mini.pairs").setup({
-	modes = { insert = true, command = true, terminal = false },
-	skip_next = [=[[%w%%%'%[%"%.%`%$]]=],
-	skip_ts = { "string" },
-	skip_unbalanced = true,
-	markdown = true,
-})
-
 -- gitsigns
 require("gitsigns").setup()
 
--- Blink.cmp (autocompletion)
--- require("blink.cmp").setup({
--- 	keymap = {
--- 		preset = "enter",
--- 		["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
--- 		["<CR>"] = { "accept", "fallback" },
--- 		["<C-Down>"] = { "scroll_documentation_down", "fallback" },
--- 		["<C-Up>"] = { "scroll_documentation_up", "fallback" },
--- 		["<Tab>"] = { "snippet_forward", "fallback" },
--- 		["<S-Tab>"] = { "snippet_backward", "fallback" },
--- 		["<Up>"] = { "select_prev", "fallback" },
--- 		["<Down>"] = { "select_next", "fallback" },
--- 		["<C-n>"] = { "select_next", "fallback" },
--- 		["<C-p>"] = { "select_prev", "fallback" },
--- 		["<C-e>"] = { "hide", "fallback" },
--- 	},
--- 	fuzzy = { implementation = "prefer_rust_with_warning" },
--- 	appearance = {
--- 		use_nvim_cmp_as_default = true,
--- 		nerd_font_variant = "normal",
--- 	},
---
--- 	completion = {
--- 		documentation = {
--- 			auto_show = true,
--- 			auto_show_delay_ms = 200,
--- 		},
--- 	},
---
--- 	cmdline = {
--- 		keymap = {
--- 			preset = "inherit",
--- 			["<CR>"] = { "accept_and_enter", "fallback" },
--- 		},
--- 	},
--- 	default = { "lsp", "path", "snippets", "buffer" },
--- 	opts_extend = { "sources.default" },
--- })
+-- Blink.cmp(autocompletion)
+require("blink.cmp").setup({
+	keymap = {
+		preset = "enter",
+		["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+		["<CR>"] = { "accept", "fallback" },
+		["<C-Down>"] = { "scroll_documentation_down", "fallback" },
+		["<C-Up>"] = { "scroll_documentation_up", "fallback" },
+		["<Tab>"] = { "snippet_forward", "fallback" },
+		["<S-Tab>"] = { "snippet_backward", "fallback" },
+		["<Up>"] = { "select_prev", "fallback" },
+		["<Down>"] = { "select_next", "fallback" },
+		["<C-n>"] = { "select_next", "fallback" },
+		["<C-p>"] = { "select_prev", "fallback" },
+		["<C-e>"] = { "hide", "fallback" },
+	},
+	fuzzy = { implementation = "prefer_rust_with_warning" },
+	completion = {
+		documentation = {
+			auto_show = true,
+			auto_show_delay_ms = 200,
+		},
+	},
+	default = { "lsp", "path", "snippets", "buffer" },
+	opts_extend = { "sources.default" },
+})
 
 -- Conform (formatting on save)
 require("conform").setup({
@@ -304,6 +282,15 @@ map("n", "<leader>t", function()
 	vim.cmd("startinsert")
 end, { desc = "Open terminal" })
 map("t", "<C-q>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
+
+-- auto close pairs
+map("i", "'", "''<left>")
+map("i", "`", "``<left>")
+map("i", '"', '""<left>')
+map("i", "(", "()<left>")
+map("i", "[", "[]<left>")
+map("i", "{", "{}<left>")
+map("i", "<", "<><left>")
 
 -- LSP CONFIGURATION
 
