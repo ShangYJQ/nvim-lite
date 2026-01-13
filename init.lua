@@ -92,10 +92,6 @@ if vim.g.neovide then
 	require("neovide")
 end
 
--- command
-
-require("command")
-
 -- PLUGINS
 
 -- Core plugins (no custom load callback)
