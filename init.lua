@@ -385,6 +385,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 		vim.lsp.enable("rust_analyzer")
 		vim.lsp.enable("clangd")
 		vim.lsp.enable("ruff")
+        vim.lsp.enable('bashls')
 		-- vim.lsp.enable("eslint")
 		-- vim.lsp.enable("vtsls")
 	end,
