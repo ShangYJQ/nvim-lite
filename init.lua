@@ -8,6 +8,9 @@ vim.g.loaded_netrwPlugin = 1
 
 -- EDITOR OPTIONS
 local opt = vim.opt
+-- Lsp servers
+local lsp_servers = { "lua_ls", "rust_analyzer", "clangd", "ruff", "bashls", "jsonls" }
+
 -- Display
 opt.number = true
 opt.relativenumber = true
@@ -18,6 +21,19 @@ opt.winborder = "rounded"
 -- Line wrapping and cursor movement
 opt.whichwrap = "<,>,[,],h,l"
 opt.wrap = false
+
+-- blink dot
+vim.opt.list = true
+
+vim.opt.listchars = {
+    -- tab = "",
+    trail = "·",
+    extends = "›",
+    precedes = "‹",
+    -- eol = "¬",
+    space = "·"
+}
+
 
 -- Indentation (4 spaces)
 local tablen = 4
@@ -96,16 +112,26 @@ vim.pack.add({
     { src = "https://github.com/catppuccin/nvim" },
     { src = "https://github.com/nvim-tree/nvim-web-devicons" },
     { src = "https://github.com/nvim-lualine/lualine.nvim" },
-    { src = "https://github.com/nvim-tree/nvim-tree.lua" },
+    { src = "https://github.com/nvim-mini/mini.indentscope" },
     -- LSP and diagnostics
     { src = "https://github.com/neovim/nvim-lspconfig" },
     { src = "https://github.com/rachartier/tiny-inline-diagnostic.nvim" },
     { src = "https://github.com/saghen/blink.cmp" },
     -- Formatting
     { src = "https://github.com/stevearc/conform.nvim" },
+
     -- Editing enhancement
+    { src = "https://github.com/nvim-telescope/telescope.nvim" },
+    { src = "https://github.com/nvim-lua/plenary.nvim" },
+
+    { src = "https://github.com/jake-stewart/multicursor.nvim" },
+
+    -- 需要自己编译 make
+    { src = "https://github.com/nvim-telescope/telescope-fzf-native.nvim" },
+
     { src = "https://github.com/lewis6991/gitsigns.nvim" },
     { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
+
 })
 
 -- PLUGIN CONFIGURATIONS
@@ -128,29 +154,12 @@ require("nvim-treesitter.install").update("all")
 
 require("nvim-treesitter.configs").setup({
     auto_install = true,
-    ensure_installed = { "html", "css", "vim", "lua", "javascript", "typescript", "tsx", "zig", "python", "cpp", "c" },
+    ensure_installed = { "html", "css", "vim", "lua", "javascript", "typescript", "tsx", "zig", "python", "cpp", "c", "bash" },
     highlight = {
         enable = true,
         additional_vim_regex_highlighting = false,
     },
 })
-
--- nvim-tree
-require("nvim-tree").setup({
-    sort = {
-        sorter = "case_sensitive",
-    },
-    view = {
-        width = 26,
-    },
-    renderer = {
-        group_empty = true,
-    },
-    filters = {
-        dotfiles = true,
-    },
-})
-
 -- gitsigns
 require("gitsigns").setup()
 
@@ -255,6 +264,40 @@ require("lualine").setup({
     },
 })
 
+-- mini indent
+require("mini.indentscope").setup {
+    symbol = "│",
+    draw = {
+        delay = 20,
+        animation = require("mini.indentscope").gen_animation.cubic(),
+        priority = 2,
+    },
+}
+
+-- Telescope set
+require('telescope').setup {
+    defaults = {
+        layout_strategy = "horizontal",
+        sorting_strategy = "ascending",
+        layout_config = {
+            prompt_position = "top",
+            width = 0.9,
+            height = 0.9,
+
+            preview_width = 0.5,
+        },
+    },
+    extensions = {
+        fzf = {
+            fuzzy = true,
+            override_generic_sorter = true,
+            override_file_sorter = true,
+            case_mode = "smart_case",
+        }
+    }
+}
+require("telescope").load_extension("fzf")
+
 -- Tiny-inline-diagnostic (prettier diagnostic display)
 require("tiny-inline-diagnostic").setup({
     preset = "modern",
@@ -266,13 +309,20 @@ require("tiny-inline-diagnostic").setup({
 
 local map = vim.keymap.set
 
+-- multi cursors
+local mc = require("multicursor-nvim")
+mc.setup()
+
+map({ "n", "x" }, "<S-c>", function() mc.lineAddCursor(1) end)
+map({ "n", "x" }, "<leader><S-c>", function() mc.lineSkipCursor(1) end)
+
 -- General editing
 map("i", "<C-q>", "<Esc>", { desc = "Exit insert mode" })
 map("n", "<C-q>", "<cmd>q<CR>", { desc = "Quit" })
 map("n", "<C-Q>", "<cmd>q!<CR>", { desc = "Forced quit" })
 map("n", "<C-z>", "<cmd>undo<CR>", { desc = "Undo" })
 map({ "n", "v" }, "d", '"_d', { desc = "Delete to black hole register" })
-map("n", "<leader>H", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
+map("n", "<leader>c", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
 
 -- Window navigation (Ctrl + hjkl)
 map("n", "<C-h>", "<C-w>h", { desc = "Focus left window" })
@@ -294,10 +344,6 @@ map("n", "<C-Right>", "<cmd>vertical resize +2<CR>", { desc = "Increase width" }
 
 -- Tab navigation
 map("n", "<S-n>", ":tabnew ", { desc = "New tab" })
-map("n", "<S-c>", "<cmd>tabclose<CR>", { desc = "Close tab" })
-
--- nvim-tree
-map("n", "<leader>e", "<cmd>NvimTreeToggle<cr>")
 
 -- Terminal
 map("n", "<leader>t", function()
@@ -305,6 +351,24 @@ map("n", "<leader>t", function()
     vim.cmd("startinsert")
 end, { desc = "Open terminal" })
 map("t", "<C-q>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
+
+-- Telescope
+local builtin = require('telescope.builtin')
+map('n', '<leader>f', builtin.find_files, { desc = 'Telescope find files' })
+map('n', '<leader>/', builtin.live_grep, { desc = 'Telescope live grep' })
+map('n', '<leader>b', builtin.buffers, { desc = 'Telescope buffers' })
+map('n', '<leader>h', builtin.help_tags, { desc = 'Telescope help tags' })
+map('n', '<leader>d', builtin.diagnostics, { desc = 'Telescope diagnostics' })
+map('n', '<leader>s', builtin.lsp_document_symbols, { desc = 'Telescope lsp_document_symbols' })
+map('n', '<leader>S', builtin.lsp_workspace_symbols, { desc = 'Telescope lsp_workspace_symbols' })
+
+-- helix move
+map("n", "gs", "0", { desc = "Move to left" })
+map("n", "gl", "$", { desc = "Move to right" })
+
+-- change x to helix mode
+map("n", "x", "V", { noremap = true, silent = true })
+map("v", "x", "<Esc>", { noremap = true, silent = true })
 
 -- auto close pairs
 map("i", "'", "''<left>")
@@ -317,7 +381,7 @@ map("i", "<", "<><left>")
 
 -- LSP CONFIGURATION
 
--- LSP keymaps (attached per buffer)
+-- LSP keymaps
 vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
     callback = function(event)
@@ -346,9 +410,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
         map("i", "<C-k>", vim.lsp.buf.signature_help, { buffer = buf, desc = "LSP: Signature help" })
 
         -- Code actions
-        map("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = buf, desc = "LSP: Code action" })
-        map("n", "<leader>cr", vim.lsp.buf.rename, { buffer = buf, desc = "LSP: Rename symbol" })
-        map("n", "<leader>cf", vim.lsp.buf.format, { buffer = buf, desc = "LSP: Format buffer" })
+        map("n", "<leader>a", vim.lsp.buf.code_action, { buffer = buf, desc = "LSP: Code action" })
+        map("n", "<leader>r", vim.lsp.buf.rename, { buffer = buf, desc = "LSP: Rename symbol" })
 
         -- Diagnostics
         -- map("n", "<leader>e", vim.diagnostic.open_float, { buffer = buf, desc = "LSP: Show diagnostics" })
@@ -365,52 +428,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 vim.api.nvim_create_autocmd("BufReadPost", {
     once = true,
     callback = function()
-        -- for vue_ls: read from VUE_LS_PATH env
-        -- run npm list -g @vue/language-server to find path
-        -- local vue_language_server_path = vim.env.VUE_LS_PATH
-        -- if vue_language_server_path then
-        -- 	local vue_plugin = {
-        -- 		name = "@vue/typescript-plugin",
-        -- 		location = vue_language_server_path,
-        -- 		languages = { "vue" },
-        -- 		configNamespace = "typescript",
-        -- 		enableForWorkspaceTypeScriptVersions = true,
-        -- 	}
-        -- 	vim.lsp.config("vtsls", {
-        -- 		filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
-        -- 		settings = {
-        -- 			vtsls = {
-        -- 				tsserver = {
-        -- 					globalPlugins = {
-        -- 						vue_plugin,
-        -- 					},
-        -- 				},
-        -- 			},
-        -- 		},
-        -- 	})
-        -- 	vim.lsp.enable("vue_ls")
-        -- end
-        vim.lsp.enable("lua_ls")
-        vim.lsp.enable("rust_analyzer")
-        vim.lsp.enable("clangd")
-        vim.lsp.enable("cmake")
-        vim.lsp.enable("ruff")
-        vim.lsp.enable('bashls')
-        vim.lsp.enable('jsonls')
-        -- vim.lsp.enable("eslint")
-        -- vim.lsp.enable("vtsls")
+        vim.lsp.enable(lsp_servers)
     end,
 })
-
--- Notify if VUE_LS_PATH is not set when opening .vue files
--- vim.api.nvim_create_autocmd("BufReadPost", {
--- 	pattern = "*.vue",
--- 	callback = function()
--- 		if not vim.env.VUE_LS_PATH then
--- 			vim.notify(
--- 				"VUE_LS_PATH environment variable is not set. Vue LSP will not work.\nRun `npm list -g @vue/language-server` to find the path.",
--- 				vim.log.levels.WARN
--- 			)
--- 		end
--- 	end,
--- })
