@@ -3,7 +3,7 @@
 vim.g.neovide_theme = "auto"
 vim.g.neovide_refresh_rate = 165
 vim.g.neovide_refresh_rate_idle = 30
-vim.g.neovide_fullscreen = true
+-- vim.g.neovide_fullscreen = true
 vim.g.neovide_cursor_antialiasing = true
 vim.g.neovide_cursor_animation_length = 0.200
 vim.g.neovide_cursor_short_animation_length = 0.08
