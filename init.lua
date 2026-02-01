@@ -34,7 +34,6 @@ vim.opt.listchars = {
     space = "·"
 }
 
-
 -- Indentation (4 spaces)
 local tablen = 4
 opt.tabstop = tablen
@@ -64,7 +63,7 @@ end
 opt.undodir = undodir
 opt.undofile = true
 
--- Search (smart case-sensitivity)
+-- Search
 opt.ignorecase = true
 opt.smartcase = true
 
@@ -124,9 +123,16 @@ vim.pack.add({
     { src = "https://github.com/nvim-telescope/telescope.nvim" },
     { src = "https://github.com/nvim-lua/plenary.nvim" },
 
+    -- cd ~/.local/share/nvim/site/pack/core/opt/blink.pairs
+    -- rustup override set nightly
+    -- cargo build --release
+    -- cargo +nightly-2025-09-30 build --release
+    { src = "https://github.com/saghen/blink.pairs" },
     { src = "https://github.com/jake-stewart/multicursor.nvim" },
 
     -- 需要自己编译 make
+    -- cd .local/share/nvim/site/pack/core/opt/telescope-fzf-native.nvim
+    -- make
     { src = "https://github.com/nvim-telescope/telescope-fzf-native.nvim" },
 
     { src = "https://github.com/lewis6991/gitsigns.nvim" },
@@ -141,8 +147,11 @@ vim.api.nvim_create_autocmd("VimEnter", {
     once = true,
     callback = function()
         require("catppuccin").setup({
+            integrations = {
+                gitsigns = true,
+            },
             flavour = "mocha",
-            transparent_background = not vim.g.neovide,
+            -- transparent_background = not vim.g.neovide,
             float = { transparent = false, solid = false },
         })
         vim.cmd("colorscheme catppuccin")
@@ -154,7 +163,7 @@ require("nvim-treesitter.install").update("all")
 
 require("nvim-treesitter.configs").setup({
     auto_install = true,
-    ensure_installed = { "html", "css", "vim", "lua", "javascript", "typescript", "tsx", "zig", "python", "cpp", "c", "bash" },
+    ensure_installed = { "html", "css", "vim", "lua", "javascript", "typescript", "tsx", "zig", "python", "cpp", "c", "bash", "rust" },
     highlight = {
         enable = true,
         additional_vim_regex_highlighting = false,
@@ -298,6 +307,9 @@ require('telescope').setup {
 }
 require("telescope").load_extension("fzf")
 
+
+require("blink.pairs").setup({})
+
 -- Tiny-inline-diagnostic (prettier diagnostic display)
 require("tiny-inline-diagnostic").setup({
     preset = "modern",
@@ -371,13 +383,13 @@ map("n", "x", "V", { noremap = true, silent = true })
 map("v", "x", "<Esc>", { noremap = true, silent = true })
 
 -- auto close pairs
-map("i", "'", "''<left>")
-map("i", "`", "``<left>")
-map("i", '"', '""<left>')
-map("i", "(", "()<left>")
-map("i", "[", "[]<left>")
-map("i", "{", "{}<left>")
-map("i", "<", "<><left>")
+-- map("i", "'", "''<left>")
+-- map("i", "`", "``<left>")
+-- map("i", '"', '""<left>')
+-- map("i", "(", "()<left>")
+-- map("i", "[", "[]<left>")
+-- map("i", "{", "{}<left>")
+-- map("i", "<", "<><left>")
 
 -- LSP CONFIGURATION
 

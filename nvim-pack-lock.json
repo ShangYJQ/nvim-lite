@@ -4,6 +4,14 @@
       "rev": "v0.5.1",
       "src": "https://github.com/saghen/blink.cmp"
     },
+    "blink.download": {
+      "rev": "86361b98f3c8317904a08e3bd12cf3cdcbe3e925",
+      "src": "https://github.com/saghen/blink.download"
+    },
+    "blink.pairs": {
+      "rev": "65978aadaf9b7d6cae59c1c51cf2b366b370546e",
+      "src": "https://github.com/saghen/blink.pairs"
+    },
     "conform.nvim": {
       "rev": "ffe26e8df8115c9665d24231f8a49fadb2d611ce",
       "src": "https://github.com/stevearc/conform.nvim"
