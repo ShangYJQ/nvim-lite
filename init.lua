@@ -100,7 +100,7 @@ end
 
 -- PLUGINS
 
--- Core plugins (no custom load callback)
+-- Core plugins
 vim.pack.add({
 	-- Theme and UI
 	{ src = "https://github.com/catppuccin/nvim" },
@@ -118,6 +118,7 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-telescope/telescope.nvim" },
 	{ src = "https://github.com/nvim-lua/plenary.nvim" },
 	{ src = "https://github.com/nvim-mini/mini.files" },
+	{ src = "https://github.com/nvim-mini/mini.surround" },
 
 	-- cd ~/.local/share/nvim/site/pack/core/opt/blink.pairs
 	-- rustup override set nightly
@@ -292,6 +293,23 @@ require("mini.indentscope").setup({
 	},
 })
 
+-- mini file
+require("mini.files").setup({})
+
+-- mini surround
+require("mini.surround").setup({
+	mappings = {
+		add = "ms",
+		delete = "md",
+		replace = "mr",
+		find = "mf",
+		find_left = "",
+		highlight = "",
+		suffix_last = "",
+		suffix_next = "",
+	},
+})
+
 -- Telescope set
 require("telescope").setup({
 	defaults = {
@@ -339,6 +357,9 @@ end)
 map({ "n", "x" }, "<leader><S-c>", function()
 	mc.lineSkipCursor(1)
 end)
+map({ "n", "x" }, "<leader>m", function()
+	mc.clearCursors()
+end)
 
 -- General editing
 map("i", "<C-q>", "<Esc>", { desc = "Exit insert mode" })
@@ -385,6 +406,11 @@ map("n", "<leader>h", builtin.help_tags, { desc = "Telescope help tags" })
 map("n", "<leader>d", builtin.diagnostics, { desc = "Telescope diagnostics" })
 map("n", "<leader>s", builtin.lsp_document_symbols, { desc = "Telescope lsp_document_symbols" })
 map("n", "<leader>S", builtin.lsp_workspace_symbols, { desc = "Telescope lsp_workspace_symbols" })
+
+-- mini files
+map("n", "<leader>e", function()
+	require("mini.files").open()
+end)
 
 -- helix move
 map("n", "gs", "0", { desc = "Move to left" })

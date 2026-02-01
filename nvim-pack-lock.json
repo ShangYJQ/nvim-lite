@@ -48,6 +48,10 @@
       "rev": "472ec50092a3314ec285d2db2baa48602d71fe93",
       "src": "https://github.com/echasnovski/mini.pairs"
     },
+    "mini.surround": {
+      "rev": "f9358544ed06bc10197e698b7fc8dc5963be3f4b",
+      "src": "https://github.com/nvim-mini/mini.surround"
+    },
     "multicursor.nvim": {
       "rev": "3b5c79c4eec52ff18ce69923156422c298b9ae5d",
       "src": "https://github.com/jake-stewart/multicursor.nvim"
