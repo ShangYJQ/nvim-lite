@@ -402,7 +402,7 @@ local builtin = require("telescope.builtin")
 map("n", "<leader>f", builtin.find_files, { desc = "Telescope find files" })
 map("n", "<leader>/", builtin.live_grep, { desc = "Telescope live grep" })
 map("n", "<leader>b", builtin.buffers, { desc = "Telescope buffers" })
-map("n", "<leader>h", builtin.help_tags, { desc = "Telescope help tags" })
+map("n", "<leader>th", builtin.help_tags, { desc = "Telescope help tags" })
 map("n", "<leader>d", builtin.diagnostics, { desc = "Telescope diagnostics" })
 map("n", "<leader>s", builtin.lsp_document_symbols, { desc = "Telescope lsp_document_symbols" })
 map("n", "<leader>S", builtin.lsp_workspace_symbols, { desc = "Telescope lsp_workspace_symbols" })
@@ -465,9 +465,37 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 		-- Diagnostics
 		-- map("n", "<leader>e", vim.diagnostic.open_float, { buffer = buf, desc = "LSP: Show diagnostics" })
-		map("n", "<leader>ld", function()
+		map("n", "<leader>D", function()
 			vim.diagnostic.open_float({ source = true })
 		end, { buffer = buf, desc = "LSP: Show diagnostics with source" })
+
+		-- 快速复制lsp信息
+
+		-- <leader>y: 仅复制当前光标下的第一条报错
+		map("n", "<leader>y", function()
+			local diagnostics = vim.diagnostic.get(0, { lnum = vim.api.nvim_win_get_cursor(0)[1] - 1 })
+			if #diagnostics > 0 then
+				vim.fn.setreg("+", diagnostics[1].message)
+				vim.notify("Copied current diagnostic!")
+			else
+				vim.notify("No diagnostic at cursor")
+			end
+		end, { buffer = buf, desc = "LSP: Copy current diagnostic" })
+
+		-- <leader>Y: 复制当前文件所有的报错信息
+		map("n", "<leader>Y", function()
+			local diagnostics = vim.diagnostic.get(0)
+			if #diagnostics > 0 then
+				local messages = ""
+				for i, d in ipairs(diagnostics) do
+					messages = messages .. string.format("[%d] Line %d: %s\n", i, d.lnum + 1, d.message)
+				end
+				vim.fn.setreg("+", messages)
+				vim.notify("Copied all " .. #diagnostics .. " diagnostics!")
+			else
+				vim.notify("No diagnostics in current buffer")
+			end
+		end, { buffer = buf, desc = "LSP: Copy all diagnostics" })
 
 		-- Override diagnostic float with tiny-inline-diagnostic
 		vim.diagnostic.open_float = require("tiny-inline-diagnostic.override").open_float
