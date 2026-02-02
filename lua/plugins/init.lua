@@ -1,7 +1,11 @@
 --  plugins list
+--  在大多数情况下会自动编译 编译失败请手动编译
 vim.pack.add({
+
+	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
+
 	-- Theme and UI
-	{ src = "https://github.com/catppuccin/nvim" },
+	{ src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
 	{ src = "https://github.com/nvim-tree/nvim-web-devicons" },
 	{ src = "https://github.com/nvim-lualine/lualine.nvim" },
 	{ src = "https://github.com/nvim-mini/mini.indentscope" },
@@ -15,13 +19,14 @@ vim.pack.add({
 	-- cargo +nightly-2025-09-30 build --release
 
 	{ src = "https://github.com/saghen/blink.cmp" },
+
 	-- Formatting
 	{ src = "https://github.com/stevearc/conform.nvim" },
 
 	-- Editing enhancement
 	{ src = "https://github.com/nvim-telescope/telescope.nvim" },
 	{ src = "https://github.com/nvim-lua/plenary.nvim" },
-	{ src = "https://github.com/nvim-mini/mini.files" },
+	-- { src = "https://github.com/nvim-mini/mini.files" },
 	{ src = "https://github.com/nvim-mini/mini.surround" },
 
 	-- cd ~/.local/share/nvim/site/pack/core/opt/blink.pairs
@@ -29,6 +34,7 @@ vim.pack.add({
 	-- cargo build --release
 	-- cargo +nightly-2025-09-30 build --release
 	{ src = "https://github.com/saghen/blink.pairs" },
+
 	{ src = "https://github.com/jake-stewart/multicursor.nvim" },
 
 	-- cd .local/share/nvim/site/pack/core/opt/telescope-fzf-native.nvim
@@ -36,8 +42,15 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-telescope/telescope-fzf-native.nvim" },
 
 	{ src = "https://github.com/lewis6991/gitsigns.nvim" },
-	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
 })
+
+-- 获得自动构建器
+local status, builder = pcall(require, "utlis.builder")
+if status then
+	builder.setup_autobuild()
+else
+	vim.notify("[error] can not find builder")
+end
 
 require("plugins.catppuccin")
 require("plugins.nvim-treesitter")
@@ -49,6 +62,6 @@ require("plugins.gitsigns")
 require("plugins.mini-surround")
 require("plugins.telescope")
 require("plugins.tiny-inline-diagnostics")
-require("plugins.mini-files")
+-- require("plugins.mini-files")
 require("plugins.multicursor-nvim")
 require("plugins.mini-indentscope")

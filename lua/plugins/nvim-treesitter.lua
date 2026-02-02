@@ -1,22 +1,44 @@
--- treesitter
--- 注意：去掉了 .configs
-require('nvim-treesitter').setup({
-  -- 注意：新版的参数和旧版完全不同了！
-  -- 详情参考文档中的“快速入门”
-  install_dir = vim.fn.stdpath('data') .. '/site'
+local ts = require("nvim-treesitter")
+
+ts.setup({
+	install_dir = vim.fn.stdpath("data") .. "/site",
 })
 
--- 手动安装你需要的解析器
-require('nvim-treesitter').install({ "html",
-		"css",
-		"vim",
-		"lua",
-		"javascript",
-		"typescript",
-		"tsx",
-		"zig",
-		"python",
-		"cpp",
-		"c",
-		"bash",
-		"rust",})
+-- 安装解析器
+ts.install({
+	"html",
+	"css",
+	"vim",
+	"lua",
+	"javascript",
+	"typescript",
+	"tsx",
+	"zig",
+	"python",
+	"cpp",
+	"c",
+	"bash",
+	"make",
+	"markdown",
+	"rust",
+	"json",
+	"toml",
+	"cmake",
+	"git_config",
+	"git_rebase",
+	"gitcommit",
+	"gitignore",
+	"zsh",
+})
+
+-- 自动启用ts高亮
+vim.api.nvim_create_autocmd("FileType", {
+	group = vim.api.nvim_create_augroup("TSHighlight", { clear = true }),
+	callback = function(ev)
+		local ignore = { "checkhealth", "lazy", "vim", "help" }
+		if vim.tbl_contains(ignore, vim.bo[ev.buf].filetype) then
+			return
+		end
+		pcall(vim.treesitter.start, ev.buf)
+	end,
+})

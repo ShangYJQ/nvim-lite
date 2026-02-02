@@ -26,7 +26,7 @@ opt.softtabstop = tablen
 opt.shiftwidth = tablen
 opt.expandtab = false
 opt.autoindent = true
--- vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
 -- Clipboard
 opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus"
