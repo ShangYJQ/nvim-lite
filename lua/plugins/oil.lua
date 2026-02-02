@@ -59,14 +59,14 @@ require("oil").setup({
 	-- See :help oil-actions for a list of all available actions
 	keymaps = {
 		["g?"] = { "actions.show_help", mode = "n" },
-		["<CR>"] = "actions.select",
+		["l"] = "actions.select",
 		["<C-s>"] = { "actions.select", opts = { vertical = true } },
 		["<C-h>"] = { "actions.select", opts = { horizontal = true } },
 		["<C-t>"] = { "actions.select", opts = { tab = true } },
 		["<C-p>"] = "actions.preview",
 		["<C-c>"] = { "actions.close", mode = "n" },
 		["<C-l>"] = "actions.refresh",
-		["-"] = { "actions.parent", mode = "n" },
+		["h"] = { "actions.parent", mode = "n" },
 		["_"] = { "actions.open_cwd", mode = "n" },
 		["`"] = { "actions.cd", mode = "n" },
 		["g~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
