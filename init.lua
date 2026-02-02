@@ -2,4 +2,5 @@
 require("config")
 require("plugins")
 
+-- 默认主题
 vim.cmd.colorscheme("kanagawa")
