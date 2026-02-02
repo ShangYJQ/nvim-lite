@@ -29,6 +29,7 @@ vim.pack.add({
 	{ src = "https://github.com/stevearc/oil.nvim" },
 	-- { src = "https://github.com/nvim-mini/mini.files" },
 	{ src = "https://github.com/nvim-mini/mini.surround" },
+	{ src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
 
 	-- cd ~/.local/share/nvim/site/pack/core/opt/blink.pairs
 	-- rustup override set nightly
@@ -62,6 +63,7 @@ require("plugins.lualine")
 require("plugins.gitsigns")
 require("plugins.mini-surround")
 require("plugins.telescope")
+require("plugins.render-markdown")
 require("plugins.tiny-inline-diagnostics")
 require("plugins.oil")
 -- require("plugins.mini-files")
