@@ -1,3 +1,5 @@
+> **Status: Achieved.** to https://github.com/ShangYJQ/nvim.config
+
 ## 由 `Neovim` v0.12 & `vim.pack` 驱动. 为速度和美观而生.
 
 ![界面预览](./screenshots/01.png)
