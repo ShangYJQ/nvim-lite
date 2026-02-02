@@ -26,6 +26,7 @@ vim.pack.add({
 	-- Editing enhancement
 	{ src = "https://github.com/nvim-telescope/telescope.nvim" },
 	{ src = "https://github.com/nvim-lua/plenary.nvim" },
+	{ src = "https://github.com/stevearc/oil.nvim" },
 	-- { src = "https://github.com/nvim-mini/mini.files" },
 	{ src = "https://github.com/nvim-mini/mini.surround" },
 
@@ -62,6 +63,7 @@ require("plugins.gitsigns")
 require("plugins.mini-surround")
 require("plugins.telescope")
 require("plugins.tiny-inline-diagnostics")
+require("plugins.oil")
 -- require("plugins.mini-files")
 require("plugins.multicursor-nvim")
 require("plugins.mini-indentscope")
