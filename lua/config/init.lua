@@ -6,6 +6,6 @@ require("config.keymap")
 
 -- neovide config
 if vim.g.neovide then
-	vim.notify("Config for neovide")
+	-- vim.notify("Config for neovide")
 	require("config.neovide")
 end

@@ -23,8 +23,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 local function dashboard()
-	if vim.fn.line("$") == 1 and vim.fn.getline(1) == "" then
-		-- 你的 Logo
+	if vim.fn.argc() == 0 and vim.fn.line("$") == 1 and vim.fn.getline(1) == "" then
 		local logo_raw = [[
 ███████╗██╗  ██╗ █████╗ ███╗   ██╗ ██████╗
 ██╔════╝██║  ██║██╔══██╗████╗  ██║██╔════╝
