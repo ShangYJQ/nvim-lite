@@ -1,4 +1,4 @@
-> **Status: Achieved.** to https://github.com/ShangYJQ/nvim.config
+> **Status: Achieved.** Move to https://github.com/ShangYJQ/nvim.config
 
 ## 由 `Neovim` v0.12 & `vim.pack` 驱动. 为速度和美观而生.
 
