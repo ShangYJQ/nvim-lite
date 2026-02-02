@@ -1,6 +1,11 @@
-## Config for neovim v0.12, enjoy
+## Powered by `Neovim` v0.12 & `vim.pack`. Designed for speed and aesthetics.
 
 ![界面预览](./screenshots/01.png)
+
+## 环境依赖
+1. 编译器: gcc, g++
+2. Rust 工具链: rustc, cargo
+3. tree-sitter-cli: 确保语法高亮解析正常
 
 ```test
 ├── after
