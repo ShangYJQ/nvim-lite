@@ -1,0 +1,59 @@
+-- EDITOR OPTIONS
+local opt = vim.opt
+
+-- Display
+opt.number = true
+opt.relativenumber = true
+opt.cursorline = true
+opt.showmode = false
+opt.winborder = "rounded"
+
+-- Line wrapping and cursor movement
+opt.whichwrap = "<,>,[,],h,l"
+opt.wrap = false
+
+-- listchars
+opt.list = true
+opt.listchars = {
+	space = "·",
+	tab = "│ ",
+}
+
+-- Indentation
+local tablen = 4
+opt.tabstop = tablen
+opt.softtabstop = tablen
+opt.shiftwidth = tablen
+opt.expandtab = false
+opt.autoindent = true
+vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+
+-- Clipboard
+opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus"
+
+-- Window splits
+opt.splitright = true
+opt.splitbelow = true
+
+-- Scrolling
+opt.scrolloff = 8
+opt.sidescrolloff = 8
+opt.smoothscroll = true
+
+-- Persistent undo
+local undodir = vim.fn.stdpath("data") .. "/undodir"
+if vim.fn.isdirectory(undodir) == 0 then
+	vim.fn.mkdir(undodir, "p")
+end
+
+opt.undodir = undodir
+opt.undofile = true
+
+-- Search
+opt.ignorecase = true
+opt.smartcase = true
+
+-- Folding via Treesitter
+opt.foldmethod = "expr"
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+opt.foldlevel = 99
