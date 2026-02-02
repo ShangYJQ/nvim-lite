@@ -36,10 +36,6 @@
       "rev": "630dd29dd696bc977cb81d7dd2fa6bb280f60fc4",
       "src": "https://github.com/jake-stewart/multicursor.nvim"
     },
-    "nvim": {
-      "rev": "beaf41a30c26fd7d6c386d383155cbd65dd554cd",
-      "src": "https://github.com/catppuccin/nvim"
-    },
     "nvim-lspconfig": {
       "rev": "3f58aeca0c6ece8a9fb8782ea3fcb6024f285be3",
       "src": "https://github.com/neovim/nvim-lspconfig"
