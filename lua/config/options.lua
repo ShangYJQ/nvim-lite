@@ -28,6 +28,9 @@ opt.expandtab = false
 opt.autoindent = true
 vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
+-- use conform
+-- vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+
 -- Clipboard
 opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus"
 

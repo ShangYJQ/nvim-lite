@@ -29,6 +29,8 @@ ts.install({
 	"gitcommit",
 	"gitignore",
 	"zsh",
+	"latex",
+	"yaml",
 })
 
 -- 自动启用ts高亮
