@@ -1,4 +1,4 @@
--- Catppuccin colorscheme (deferred to VimEnter for performance)
+-- Catppuccin colorscheme
 vim.api.nvim_create_autocmd("VimEnter", {
 	once = true,
 	callback = function()
