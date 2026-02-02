@@ -24,6 +24,7 @@ ts.install({
 	"json",
 	"toml",
 	"cmake",
+	"go",
 	"git_config",
 	"git_rebase",
 	"gitcommit",
