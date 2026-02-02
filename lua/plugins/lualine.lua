@@ -48,7 +48,6 @@ require("lualine").setup({
 				end,
 				separator = { left = "", right = "" },
 				padding = { left = 1, right = 2 },
-				gui = "bold",
 			},
 		},
 		-- lualine_a = { { "mode", separator = { left = "", right = "" }, right_padding = 2 } },
