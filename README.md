@@ -1,5 +1,7 @@
 ## Config for neovim v0.12, enjoy
 
+![界面预览](./screenshots/01.png)
+
 ```test
 ├── after
 │   └── lsp
