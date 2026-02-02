@@ -8,6 +8,12 @@ vim.pack.add({
 	-- LSP and diagnostics
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
 	{ src = "https://github.com/rachartier/tiny-inline-diagnostic.nvim" },
+
+	-- cd ~/.local/share/nvim/site/pack/core/opt/blink.cmp
+	-- rustup override set nightly
+	-- cargo build --release
+	-- cargo +nightly-2025-09-30 build --release
+
 	{ src = "https://github.com/saghen/blink.cmp" },
 	-- Formatting
 	{ src = "https://github.com/stevearc/conform.nvim" },
@@ -30,7 +36,7 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-telescope/telescope-fzf-native.nvim" },
 
 	{ src = "https://github.com/lewis6991/gitsigns.nvim" },
-	{ src = "https://github.com/nvim-treesitter/nvim-treesitter" },
+	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
 })
 
 require("plugins.catppuccin")

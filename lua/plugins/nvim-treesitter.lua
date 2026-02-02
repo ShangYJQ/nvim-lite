@@ -1,10 +1,13 @@
 -- treesitter
-require("nvim-treesitter.install").update("all")
+-- 注意：去掉了 .configs
+require('nvim-treesitter').setup({
+  -- 注意：新版的参数和旧版完全不同了！
+  -- 详情参考文档中的“快速入门”
+  install_dir = vim.fn.stdpath('data') .. '/site'
+})
 
-require("nvim-treesitter.configs").setup({
-	auto_install = true,
-	ensure_installed = {
-		"html",
+-- 手动安装你需要的解析器
+require('nvim-treesitter').install({ "html",
 		"css",
 		"vim",
 		"lua",
@@ -16,10 +19,4 @@ require("nvim-treesitter.configs").setup({
 		"cpp",
 		"c",
 		"bash",
-		"rust",
-	},
-	highlight = {
-		enable = true,
-		additional_vim_regex_highlighting = false,
-	},
-})
+		"rust",})

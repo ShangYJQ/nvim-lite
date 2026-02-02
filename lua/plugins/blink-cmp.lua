@@ -21,6 +21,4 @@ require("blink.cmp").setup({
 			auto_show_delay_ms = 200,
 		},
 	},
-	default = { "lsp", "path", "snippets", "buffer" },
-	opts_extend = { "sources.default" },
 })
